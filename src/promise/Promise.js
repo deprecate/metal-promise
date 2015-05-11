@@ -1178,4 +1178,8 @@ CancellablePromise.CancellationError = class extends Error {
 /** @override */
 CancellablePromise.CancellationError.prototype.name = 'cancel';
 
+if (typeof window.Promise === 'undefined') {
+  window.Promise = CancellablePromise;
+}
+
 export {CancellablePromise, async};
