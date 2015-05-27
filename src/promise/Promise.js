@@ -10,7 +10,7 @@
 
 'use strict';
 
-import core from 'metaljs/src/core';
+import core from 'bower:metaljs/src/core';
 
 /**
  * Provides a more strict interface for Thenables in terms of
