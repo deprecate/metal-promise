@@ -4,13 +4,11 @@
  *      Copyright 2013 The Closure Library Authors. All Rights Reserved.
  *
  * NOTE(eduardo): Promise support is not ready on all supported browsers,
- * therefore core.js is temporarily using Google's promises as polyfill. It
+ * therefore Metal.js is temporarily using Google's promises as polyfill. It
  * supports cancellable promises and has clean and fast implementation.
  */
 
 'use strict';
-
-import core from 'bower:metal/src/core';
 
 /**
  * Provides a more strict interface for Thenables in terms of
@@ -226,8 +224,8 @@ async.nextTick = function(callback, opt_context) {
   }
   cb = async.nextTick.wrapCallback_(cb);
   // Introduced and currently only supported by IE10.
-  if (core.isFunction(window.setImmediate)) {
-    window.setImmediate(cb);
+  if (typeof setImmediate === 'function') {
+    setImmediate(cb);
     return;
   }
   // Look for and cache the custom fallback version of setImmediate.
@@ -255,13 +253,17 @@ async.nextTick.setImmediate_ = null;
 async.nextTick.getSetImmediateEmulator_ = function() {
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
-  var Channel = window.MessageChannel;
+  var Channel;
+
+  if (typeof MessageChannel !== 'undefined') {
+    Channel = MessageChannel;
+  }
+
   // If MessageChannel is not available and we are in a browser, implement
   // an iframe based polyfill in browsers that have postMessage and
   // document.addEventListener. The latter excludes IE8 because it has a
   // synchronous postMessage implementation.
-  if (typeof Channel === 'undefined' && typeof window !== 'undefined' &&
-    window.postMessage && window.addEventListener) {
+  if (!Channel && typeof postMessage !== 'undefined' && typeof addEventListener !== 'undefined') {
     /** @constructor */
     Channel = function() {
       // Make an empty, invisible iframe.
@@ -648,8 +650,8 @@ CancellablePromise.firstFulfilled = function(promises) {
  */
 CancellablePromise.prototype.then = function(opt_onFulfilled, opt_onRejected, opt_context) {
   return this.addChildPromise_(
-    core.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
-    core.isFunction(opt_onRejected) ? opt_onRejected : null,
+    (typeof opt_onFulfilled === 'function') ? opt_onFulfilled : null,
+    (typeof opt_onRejected === 'function') ? opt_onRejected : null,
     opt_context);
 };
 Thenable.addImplementation(CancellablePromise);
@@ -869,7 +871,7 @@ onFulfilled, onRejected, opt_context) {
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!core.isDef(result) &&
+        if (result === undefined &&
           reason instanceof CancellablePromise.CancellationError) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
@@ -951,10 +953,10 @@ CancellablePromise.prototype.resolve_ = function(state, x) {
     x.then(this.unblockAndFulfill_, this.unblockAndReject_, this);
     return;
 
-  } else if (core.isObject(x)) {
+  } else if (typeof x === 'object') {
     try {
       var then = x.then;
-      if (core.isFunction(then)) {
+      if (typeof then === 'function') {
         this.tryThen_(x, then);
         return;
       }
@@ -1177,9 +1179,5 @@ CancellablePromise.CancellationError = class extends Error {
 
 /** @override */
 CancellablePromise.CancellationError.prototype.name = 'cancel';
-
-if (typeof window.Promise === 'undefined') {
-  window.Promise = CancellablePromise;
-}
 
 export {CancellablePromise, async};
