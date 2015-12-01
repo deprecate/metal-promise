@@ -739,6 +739,7 @@ CancellablePromise.prototype.cancel = function(opt_message) {
   if (this.state_ === CancellablePromise.State_.PENDING) {
     async.run(function() {
       var err = new CancellablePromise.CancellationError(opt_message);
+      err.IS_CANCELLATION_ERROR = true;
       this.cancelInternal_(err);
     }, this);
   }
@@ -874,8 +875,7 @@ onFulfilled, onRejected, opt_context) {
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!core.isDef(result) &&
-          reason instanceof CancellablePromise.CancellationError) {
+        if (!core.isDef(result) && reason.IS_CANCELLATION_ERROR) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
         } else {
@@ -973,8 +973,7 @@ CancellablePromise.prototype.resolve_ = function(state, x) {
   this.state_ = state;
   this.scheduleCallbacks_();
 
-  if (state === CancellablePromise.State_.REJECTED &&
-    !(x instanceof CancellablePromise.CancellationError)) {
+  if (state === CancellablePromise.State_.REJECTED && !x.IS_CANCELLATION_ERROR) {
     CancellablePromise.addUnhandledRejection_(this, x);
   }
 };
