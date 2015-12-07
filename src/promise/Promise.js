@@ -950,4 +950,5 @@ CancellablePromise.CancellationError = class extends Error {
 /** @override */
 CancellablePromise.CancellationError.prototype.name = 'cancel';
 
-export {CancellablePromise, async};
+export {CancellablePromise};
+export default CancellablePromise;
