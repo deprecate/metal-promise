@@ -1,0 +1,22 @@
+{
+	"name": "metal-promise",
+	"version": "0.0.0",
+	"description": "Promises polyfill from Google's Closure Library in ES6",
+	"license": "BSD",
+	"repository": "metal/metal-promise",
+	"engines": {
+		"node": ">=0.12.0",
+		"npm": ">=3.0.0"
+	},
+	"files": [
+		"src/**/*.js",
+		"test/**/*.js"
+	],
+	"keywords": [
+		"metal",
+		"promise"
+	],
+	"dependencies": {
+		"metal": "metal/metal.js#master"
+	}
+}
