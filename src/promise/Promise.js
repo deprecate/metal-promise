@@ -10,8 +10,8 @@
 
 'use strict';
 
-import core from 'metal/src/core';
-import async from 'metal/src/async/async';
+import { core } from 'metal';
+import { async } from 'metal';
 
 /**
  * Provides a more strict interface for Thenables in terms of
