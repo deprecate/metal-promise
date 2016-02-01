@@ -8,15 +8,26 @@
 		"node": ">=0.12.0",
 		"npm": ">=3.0.0"
 	},
+	"main": "lib/promise/Promise.js",
+	"browser": "src/promise/Promise.js",
 	"files": [
-		"src/**/*.js",
-		"test/**/*.js"
+		"lib",
+		"src",
+		"test"
 	],
+	"scripts": {
+		"compile": "babel --presets es2015 -d lib/ src/",
+		"install": "npm run compile"
+	},
 	"keywords": [
 		"metal",
 		"promise"
 	],
 	"dependencies": {
 		"metal": "metal/metal.js#master"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.4.5",
+		"babel-preset-es2015": "^6.3.13"
 	}
 }
