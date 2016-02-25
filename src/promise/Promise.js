@@ -242,9 +242,6 @@ var CancellablePromise = function(resolver, opt_context) {
 };
 
 /**
- * @define {number} The delay in milliseconds before a rejected Promise's reason
- * is passed to the rejection handler. By default, the rejection handler
- * rethrows the rejection reason so that it appears in the developer console or
  * {@code window.onerror} handler.
  *
  * Rejections are rethrown as quickly as possible by default. A negative value
