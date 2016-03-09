@@ -17,7 +17,7 @@
 	],
 	"scripts": {
 		"compile": "babel --presets es2015 -d lib/ src/",
-		"install": "npm run compile"
+		"prepublish": "npm run compile"
 	},
 	"keywords": [
 		"metal",
