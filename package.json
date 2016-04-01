@@ -9,7 +9,7 @@
 		"npm": ">=3.0.0"
 	},
 	"main": "lib/promise/Promise.js",
-	"browser": "src/promise/Promise.js",
+	"jsnext:main": "src/promise/Promise.js",
 	"files": [
 		"lib",
 		"src",
