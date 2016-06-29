@@ -1,6 +1,6 @@
 {
 	"name": "metal-promise",
-	"version": "1.0.0-rc.3",
+	"version": "1.0.0-rc.4",
 	"description": "Promises polyfill from Google's Closure Library in ES6",
 	"license": "BSD",
 	"repository": "metal/metal-promise",
