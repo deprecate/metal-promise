@@ -1,33 +1,33 @@
 {
-	"name": "metal-promise",
-	"version": "1.0.0-rc.4",
-	"description": "Promises polyfill from Google's Closure Library in ES6",
-	"license": "BSD",
-	"repository": "metal/metal-promise",
-	"engines": {
-		"node": ">=0.12.0",
-		"npm": ">=3.0.0"
-	},
-	"main": "lib/promise/Promise.js",
-	"jsnext:main": "src/promise/Promise.js",
-	"files": [
-		"lib",
-		"src",
-		"test"
-	],
-	"scripts": {
-		"compile": "babel --presets metal -d lib/ src/",
-		"prepublish": "npm run compile"
-	},
-	"keywords": [
-		"metal",
-		"promise"
-	],
-	"dependencies": {
-		"metal": "^1.0.0"
-	},
-	"devDependencies": {
-		"babel-cli": "^6.4.5",
-		"babel-preset-metal": "^4.0.0"
-	}
+  "name": "metal-promise",
+  "version": "1.0.0",
+  "description": "Promises polyfill from Google's Closure Library in ES6",
+  "license": "BSD",
+  "repository": "metal/metal-promise",
+  "engines": {
+    "node": ">=0.12.0",
+    "npm": ">=3.0.0"
+  },
+  "main": "lib/promise/Promise.js",
+  "jsnext:main": "src/promise/Promise.js",
+  "files": [
+    "lib",
+    "src",
+    "test"
+  ],
+  "scripts": {
+    "compile": "babel --presets metal -d lib/ src/",
+    "prepublish": "npm run compile"
+  },
+  "keywords": [
+    "metal",
+    "promise"
+  ],
+  "dependencies": {
+    "metal": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-metal": "^4.0.0"
+  }
 }
