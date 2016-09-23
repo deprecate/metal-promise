@@ -4,13 +4,13 @@
  *      Copyright 2013 The Closure Library Authors. All Rights Reserved.
  *
  * NOTE(eduardo): Promise support is not ready on all supported browsers,
- * therefore core.js is temporarily using Google's promises as polyfill. It
- * supports cancellable promises and has clean and fast implementation.
+ * therefore metal-promise is temporarily using Google's promises as polyfill.
+ * It supports cancellable promises and has clean and fast implementation.
  */
 
 'use strict';
 
-import { core } from 'metal';
+import { isDef, isFunction, isObject } from 'metal';
 import { async } from 'metal';
 
 /**
@@ -421,8 +421,8 @@ CancellablePromise.firstFulfilled = function(promises) {
  */
 CancellablePromise.prototype.then = function(opt_onFulfilled, opt_onRejected, opt_context) {
   return this.addChildPromise_(
-    core.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
-    core.isFunction(opt_onRejected) ? opt_onRejected : null,
+    isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
+    isFunction(opt_onRejected) ? opt_onRejected : null,
     opt_context);
 };
 Thenable.addImplementation(CancellablePromise);
@@ -643,7 +643,7 @@ onFulfilled, onRejected, opt_context) {
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!core.isDef(result) && reason.IS_CANCELLATION_ERROR) {
+        if (!isDef(result) && reason.IS_CANCELLATION_ERROR) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
         } else {
@@ -724,10 +724,10 @@ CancellablePromise.prototype.resolve_ = function(state, x) {
     x.then(this.unblockAndFulfill_, this.unblockAndReject_, this);
     return;
 
-  } else if (core.isObject(x)) {
+  } else if (isObject(x)) {
     try {
       var then = x.then;
-      if (core.isFunction(then)) {
+      if (isFunction(then)) {
         this.tryThen_(x, then);
         return;
       }
