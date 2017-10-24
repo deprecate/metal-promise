@@ -1,6 +1,6 @@
 {
   "name": "metal-promise",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Promises polyfill from Google's Closure Library in ES6",
   "license": "BSD",
   "repository": "metal/metal-promise",
@@ -8,8 +8,8 @@
     "node": ">=0.12.0",
     "npm": ">=3.0.0"
   },
-  "main": "lib/promise/Promise.js",
-  "jsnext:main": "src/promise/Promise.js",
+  "main": "lib/all.js",
+  "jsnext:main": "src/all.js",
   "files": [
     "lib",
     "src",
@@ -17,7 +17,8 @@
   ],
   "scripts": {
     "compile": "babel --presets metal -d lib/ src/",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "test": "jest"
   },
   "keywords": [
     "metal",
@@ -28,6 +29,9 @@
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",
-    "babel-preset-metal": "^4.0.0"
+    "babel-jest": "^21.2.0",
+    "babel-preset-metal": "^4.0.0",
+    "jest": "^21.2.1",
+    "sinon": "^4.0.1"
   }
 }
