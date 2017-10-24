@@ -1,3 +1,7 @@
+# metal-promise
+
+[![Build Status](https://travis-ci.org/metal/metal-promise.svg?branch=master)](https://travis-ci.org/metal/metal-promise)
+
 ```
 /*!
  * Promises polyfill from Google's Closure Library in ES6.
