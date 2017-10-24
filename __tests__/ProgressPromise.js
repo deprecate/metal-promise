@@ -105,4 +105,25 @@ describe('ProgressPromise', function() {
 			done();
 		})
 	});
+
+	test('promise should call all progress listeners of child promises', function(done) {
+		const listener = sinon.stub();
+
+		const promise = new ProgressPromise(function(resolve, reject, progress) {
+			async.nextTick(() => {
+				progress(0.5);
+				progress(0.75);
+				resolve();
+			});
+		})
+		.thenCatch(function() {})
+		.progress(listener)
+		.then(() => {
+			expect(listener.callCount).toBe(2);
+			expect(listener.getCall(0).args[0]).toBe(0.5);
+			expect(listener.getCall(1).args[0]).toBe(0.75);
+
+			done();
+		})
+	});
 });
