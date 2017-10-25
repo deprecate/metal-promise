@@ -11,7 +11,7 @@
 'use strict';
 
 import Thenable from './Thenable';
-import { isDef, isFunction, isObject, isString } from 'metal';
+import { isDef, isFunction, isObject, isString, nullFunction } from 'metal';
 import { async } from 'metal';
 
 /**
@@ -177,10 +177,10 @@ var CancellablePromise = function(resolver, opt_context) {
     this.currentStep_ = 0;
   }
 
-  // As an optimization, we can skip this if resolver is goog.nullFunction.
+  // As an optimization, we can skip this if resolver is nullFunction.
   // This value is passed internally when creating a promise which will be
   // resolved through a more optimized path.
-  if (resolver != goog.nullFunction) {
+  if (resolver != nullFunction) {
     try {
       var self = this;
       resolver.call(
@@ -359,9 +359,9 @@ CancellablePromise.resolve = function(opt_value) {
     return opt_value;
   }
 
-  // Passing goog.nullFunction will cause the constructor to take an optimized
+  // Passing nullFunction will cause the constructor to take an optimized
   // path that skips calling the resolver function.
-  var promise = new CancellablePromise(goog.nullFunction);
+  var promise = new CancellablePromise(nullFunction);
   promise.resolve_(CancellablePromise.State_.FULFILLED, opt_value);
   return promise;
 };
@@ -635,7 +635,7 @@ CancellablePromise.prototype.thenVoid = function(
   // distinguish unhandled rejections.
   this.addCallbackEntry_(
       CancellablePromise.getCallbackEntry_(
-          opt_onFulfilled || goog.nullFunction, opt_onRejected || null,
+          opt_onFulfilled || nullFunction, opt_onRejected || null,
           opt_context));
 };
 
