@@ -570,17 +570,6 @@ CancellablePromise.withResolver = function() {
 CancellablePromise.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
 
-  if (opt_onFulfilled != null) {
-    goog.asserts.assertFunction(
-        opt_onFulfilled, 'opt_onFulfilled should be a function.');
-  }
-  if (opt_onRejected != null) {
-    goog.asserts.assertFunction(
-        opt_onRejected,
-        'opt_onRejected should be a function. Did you pass opt_context ' +
-            'as the second argument instead of the third?');
-  }
-
   if (CancellablePromise.LONG_STACK_TRACES) {
     this.addStackTrace_(new Error('then'));
   }
@@ -615,17 +604,6 @@ Thenable.addImplementation(CancellablePromise);
  */
 CancellablePromise.prototype.thenVoid = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
-
-  if (opt_onFulfilled != null) {
-    goog.asserts.assertFunction(
-        opt_onFulfilled, 'opt_onFulfilled should be a function.');
-  }
-  if (opt_onRejected != null) {
-    goog.asserts.assertFunction(
-        opt_onRejected,
-        'opt_onRejected should be a function. Did you pass opt_context ' +
-            'as the second argument instead of the third?');
-  }
 
   if (CancellablePromise.LONG_STACK_TRACES) {
     this.addStackTrace_(new Error('then'));
@@ -881,7 +859,6 @@ CancellablePromise.prototype.addChildPromise_ = function(
  * @private
  */
 CancellablePromise.prototype.unblockAndFulfill_ = function(value) {
-  goog.asserts.assert(this.state_ == CancellablePromise.State_.BLOCKED);
   this.state_ = CancellablePromise.State_.PENDING;
   this.resolve_(CancellablePromise.State_.FULFILLED, value);
 };
@@ -894,7 +871,6 @@ CancellablePromise.prototype.unblockAndFulfill_ = function(value) {
  * @private
  */
 CancellablePromise.prototype.unblockAndReject_ = function(reason) {
-  goog.asserts.assert(this.state_ == CancellablePromise.State_.BLOCKED);
   this.state_ = CancellablePromise.State_.PENDING;
   this.resolve_(CancellablePromise.State_.REJECTED, reason);
 };
@@ -1064,8 +1040,6 @@ CancellablePromise.prototype.hasEntry_ = function() {
  * @private
  */
 CancellablePromise.prototype.queueEntry_ = function(entry) {
-  goog.asserts.assert(entry.onFulfilled != null);
-
   if (this.callbackEntriesTail_) {
     this.callbackEntriesTail_.next = entry;
     this.callbackEntriesTail_ = entry;
@@ -1092,10 +1066,6 @@ CancellablePromise.prototype.popEntry_ = function() {
   if (!this.callbackEntries_) {
     this.callbackEntriesTail_ = null;
   }
-
-  if (entry != null) {
-    goog.asserts.assert(entry.onFulfilled != null);
-  }
   return entry;
 };
 
@@ -1105,8 +1075,6 @@ CancellablePromise.prototype.popEntry_ = function() {
  * @private
  */
 CancellablePromise.prototype.removeEntryAfter_ = function(previous) {
-  goog.asserts.assert(this.callbackEntries_);
-  goog.asserts.assert(previous != null);
   // If the last entry is being removed, update the tail
   if (previous.next == this.callbackEntriesTail_) {
     this.callbackEntriesTail_ = previous;
