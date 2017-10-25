@@ -1,7 +1,7 @@
 'use strict';
 
 import CancellablePromise from './promise/Promise';
-import { async } from 'metal';
+import { async, isDef } from 'metal';
 
 class ProgressPromise extends CancellablePromise {
 	/**

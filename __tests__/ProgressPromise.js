@@ -126,4 +126,18 @@ describe('ProgressPromise', function() {
 			done();
 		})
 	});
+
+	test('promise should call thenCatch if the promise is canceled', function(done) {
+		const promise = new ProgressPromise(function(resolve, reject, progress) {
+			async.nextTick(() => {
+				resolve();
+			});
+		})
+		.thenCatch(function(error) {
+			expect(error.IS_CANCELLATION_ERROR).toBe(true);
+			done();
+		})
+		.progress()
+		.cancel();
+	});
 });
