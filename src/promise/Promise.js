@@ -217,7 +217,7 @@ var CancellablePromise = function(resolver, opt_context) {
  * @define {boolean} Whether traces of {@code then} calls should be included in
  * exceptions thrown
  */
-goog.define('CancellablePromise.LONG_STACK_TRACES', false);
+CancellablePromise.LONG_STACK_TRACES = false;
 
 
 /**
@@ -229,7 +229,7 @@ goog.define('CancellablePromise.LONG_STACK_TRACES', false);
  * Rejections are rethrown as quickly as possible by default. A negative value
  * disables rejection handling entirely.
  */
-goog.define('CancellablePromise.UNHANDLED_REJECTION_DELAY', 0);
+CancellablePromise.UNHANDLED_REJECTION_DELAY = 0;
 
 
 /**
@@ -298,7 +298,7 @@ CancellablePromise.CallbackEntry_.prototype.reset = function() {
  * @define {number} The number of currently unused objects to keep around for
  *    reuse.
  */
-goog.define('CancellablePromise.DEFAULT_MAX_UNUSED', 100);
+CancellablePromise.DEFAULT_MAX_UNUSED = 100;
 
 
 /** @const @private {goog.async.FreeList<!CancellablePromise.CallbackEntry_>} */
