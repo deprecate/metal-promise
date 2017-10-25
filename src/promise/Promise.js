@@ -189,8 +189,7 @@ var CancellablePromise = function(resolver, opt_context) {
             self.resolve_(CancellablePromise.State_.FULFILLED, value);
           },
           function(reason) {
-            if (goog.DEBUG &&
-                !(reason instanceof CancellablePromise.CancellationError)) {
+            if (!reason.IS_CANCELLATION_ERROR) {
               try {
                 // Promise was rejected. Step up one call frame to see why.
                 if (reason instanceof Error) {
@@ -712,6 +711,7 @@ CancellablePromise.prototype.cancel = function(opt_message) {
   if (this.state_ == CancellablePromise.State_.PENDING) {
     async.run(function() {
       var err = new CancellablePromise.CancellationError(opt_message);
+      err.IS_CANCELLATION_ERROR = true;
       this.cancelInternal_(err);
     }, this);
   }
@@ -850,8 +850,7 @@ CancellablePromise.prototype.addChildPromise_ = function(
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!isDef(result) &&
-            reason instanceof CancellablePromise.CancellationError) {
+        if (!isDef(result) && reason.IS_CANCELLATION_ERROR) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
         } else {
@@ -936,8 +935,7 @@ CancellablePromise.prototype.resolve_ = function(state, x) {
   this.parent_ = null;
   this.scheduleCallbacks_();
 
-  if (state == CancellablePromise.State_.REJECTED &&
-      !(x instanceof CancellablePromise.CancellationError)) {
+  if (state == CancellablePromise.State_.REJECTED && !x.IS_CANCELLATION_ERROR) {
     CancellablePromise.addUnhandledRejection_(this, x);
   }
 };
