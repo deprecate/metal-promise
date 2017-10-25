@@ -214,20 +214,22 @@ var CancellablePromise = function(resolver, opt_context) {
 
 
 /**
- * @define {boolean} Whether traces of {@code then} calls should be included in
+ * Whether traces of {@code then} calls should be included in
  * exceptions thrown
+ * @type {boolean}
  */
 CancellablePromise.LONG_STACK_TRACES = false;
 
 
 /**
- * @define {number} The delay in milliseconds before a rejected Promise's reason
+ * The delay in milliseconds before a rejected Promise's reason
  * is passed to the rejection handler. By default, the rejection handler
  * rethrows the rejection reason so that it appears in the developer console or
  * {@code window.onerror} handler.
  *
  * Rejections are rethrown as quickly as possible by default. A negative value
  * disables rejection handling entirely.
+ * @type {number}
  */
 CancellablePromise.UNHANDLED_REJECTION_DELAY = 0;
 
@@ -295,8 +297,9 @@ CancellablePromise.CallbackEntry_.prototype.reset = function() {
 
 
 /**
- * @define {number} The number of currently unused objects to keep around for
+ * The number of currently unused objects to keep around for
  *    reuse.
+ * @type {number}
  */
 CancellablePromise.DEFAULT_MAX_UNUSED = 100;
 
