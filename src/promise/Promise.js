@@ -1320,14 +1320,18 @@ CancellablePromise.setUnhandledRejectionHandler = function(handler) {
  *
  * @param {string=} opt_message
  * @constructor
- * @extends {goog.debug.Error}
+ * @extends {Error}
  * @final
  */
-CancellablePromise.CancellationError = function(opt_message) {
-  CancellablePromise.CancellationError.base(this, 'constructor', opt_message);
-};
-goog.inherits(CancellablePromise.CancellationError, goog.debug.Error);
+CancellablePromise.CancellationError = class extends Error {
+  constructor(opt_message) {
+     super(opt_message);
 
+     if (opt_message) {
+       this.message = opt_message;
+     }
+   }
+};
 
 /** @override */
 CancellablePromise.CancellationError.prototype.name = 'cancel';
