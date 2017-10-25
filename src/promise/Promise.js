@@ -393,7 +393,7 @@ CancellablePromise.resolveThen_ = function(value, onFulfilled, onRejected) {
   var isThenable =
       CancellablePromise.maybeThen_(value, onFulfilled, onRejected, null);
   if (!isThenable) {
-    async.run(goog.partial(onFulfilled, value));
+    async.run(partial(onFulfilled, value));
   }
 };
 
@@ -450,7 +450,7 @@ CancellablePromise.all = function(promises) {
 
     for (var i = 0, promise; i < promises.length; i++) {
       promise = promises[i];
-      CancellablePromise.resolveThen_(promise, goog.partial(onFulfill, i), onReject);
+      CancellablePromise.resolveThen_(promise, partial(onFulfill, i), onReject);
     }
   });
 };
@@ -493,8 +493,8 @@ CancellablePromise.allSettled = function(promises) {
     for (var i = 0, promise; i < promises.length; i++) {
       promise = promises[i];
       CancellablePromise.resolveThen_(
-          promise, goog.partial(onSettled, i, true /* fulfilled */),
-          goog.partial(onSettled, i, false /* fulfilled */));
+          promise, partial(onSettled, i, true /* fulfilled */),
+          partial(onSettled, i, false /* fulfilled */));
     }
   });
 };
@@ -530,7 +530,7 @@ CancellablePromise.firstFulfilled = function(promises) {
 
     for (var i = 0, promise; i < promises.length; i++) {
       promise = promises[i];
-      CancellablePromise.resolveThen_(promise, onFulfill, goog.partial(onReject, i));
+      CancellablePromise.resolveThen_(promise, onFulfill, partial(onReject, i));
     }
   });
 };
