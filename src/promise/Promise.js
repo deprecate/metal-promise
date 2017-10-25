@@ -1247,7 +1247,7 @@ CancellablePromise.prototype.appendLongStack_ = function(err) {
 CancellablePromise.prototype.removeUnhandledRejection_ = function() {
   if (CancellablePromise.UNHANDLED_REJECTION_DELAY > 0) {
     for (var p = this; p && p.unhandledRejectionId_; p = p.parent_) {
-      goog.global.clearTimeout(p.unhandledRejectionId_);
+      clearTimeout(p.unhandledRejectionId_);
       p.unhandledRejectionId_ = 0;
     }
   } else if (CancellablePromise.UNHANDLED_REJECTION_DELAY == 0) {
@@ -1271,7 +1271,7 @@ CancellablePromise.prototype.removeUnhandledRejection_ = function() {
  */
 CancellablePromise.addUnhandledRejection_ = function(promise, reason) {
   if (CancellablePromise.UNHANDLED_REJECTION_DELAY > 0) {
-    promise.unhandledRejectionId_ = goog.global.setTimeout(function() {
+    promise.unhandledRejectionId_ = setTimeout(function() {
       promise.appendLongStack_(reason);
       CancellablePromise.handleRejection_.call(null, reason);
     }, CancellablePromise.UNHANDLED_REJECTION_DELAY);
