@@ -694,6 +694,11 @@ CancellablePromise.prototype.thenCatch = function(onRejected, opt_context) {
   return this.addChildPromise_(null, onRejected, opt_context);
 };
 
+/**
+ * Alias of {@link CancellablePromise.prototype.thenCatch}
+ */
+CancellablePromise.prototype.catch = CancellablePromise.prototype.thenCatch;
+
 
 /**
  * Cancels the Promise if it is still pending by rejecting it with a cancel
