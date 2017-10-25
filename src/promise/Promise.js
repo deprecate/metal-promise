@@ -301,8 +301,8 @@ CancellablePromise.CallbackEntry_.prototype.reset = function() {
 CancellablePromise.DEFAULT_MAX_UNUSED = 100;
 
 
-/** @const @private {goog.async.FreeList<!CancellablePromise.CallbackEntry_>} */
-CancellablePromise.freelist_ = new goog.async.FreeList(
+/** @const @private {async.FreeList<!CancellablePromise.CallbackEntry_>} */
+CancellablePromise.freelist_ = new async.FreeList(
     function() { return new CancellablePromise.CallbackEntry_(); },
     function(item) { item.reset(); }, CancellablePromise.DEFAULT_MAX_UNUSED);
 
@@ -393,7 +393,7 @@ CancellablePromise.resolveThen_ = function(value, onFulfilled, onRejected) {
   var isThenable =
       CancellablePromise.maybeThen_(value, onFulfilled, onRejected, null);
   if (!isThenable) {
-    goog.async.run(goog.partial(onFulfilled, value));
+    async.run(goog.partial(onFulfilled, value));
   }
 };
 
@@ -710,7 +710,7 @@ CancellablePromise.prototype.thenCatch = function(onRejected, opt_context) {
  */
 CancellablePromise.prototype.cancel = function(opt_message) {
   if (this.state_ == CancellablePromise.State_.PENDING) {
-    goog.async.run(function() {
+    async.run(function() {
       var err = new CancellablePromise.CancellationError(opt_message);
       this.cancelInternal_(err);
     }, this);
@@ -1041,7 +1041,7 @@ CancellablePromise.tryThen_ = function(
 CancellablePromise.prototype.scheduleCallbacks_ = function() {
   if (!this.executing_) {
     this.executing_ = true;
-    goog.async.run(this.executeCallbacks_, this);
+    async.run(this.executeCallbacks_, this);
   }
 };
 
@@ -1278,7 +1278,7 @@ CancellablePromise.addUnhandledRejection_ = function(promise, reason) {
 
   } else if (CancellablePromise.UNHANDLED_REJECTION_DELAY == 0) {
     promise.hadUnhandledRejection_ = true;
-    goog.async.run(function() {
+    async.run(function() {
       if (promise.hadUnhandledRejection_) {
         promise.appendLongStack_(reason);
         CancellablePromise.handleRejection_.call(null, reason);
@@ -1294,7 +1294,7 @@ CancellablePromise.addUnhandledRejection_ = function(promise, reason) {
  * @type {function(*)}
  * @private
  */
-CancellablePromise.handleRejection_ = goog.async.throwException;
+CancellablePromise.handleRejection_ = async.throwException;
 
 
 /**
@@ -1307,7 +1307,7 @@ CancellablePromise.handleRejection_ = goog.async.throwException;
  * captured by the developer console or a {@code window.onerror} handler.
  *
  * @param {function(*)} handler A function that will be called with reasons from
- *     rejected Promises. Defaults to {@code goog.async.throwException}.
+ *     rejected Promises. Defaults to {@code async.throwException}.
  */
 CancellablePromise.setUnhandledRejectionHandler = function(handler) {
   CancellablePromise.handleRejection_ = handler;
