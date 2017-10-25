@@ -11,7 +11,7 @@
 'use strict';
 
 import Thenable from './Thenable';
-import { isDef, isFunction, isObject } from 'metal';
+import { isDef, isFunction, isObject, isString } from 'metal';
 import { async } from 'metal';
 
 /**
@@ -586,8 +586,8 @@ CancellablePromise.prototype.then = function(
   }
 
   return this.addChildPromise_(
-      goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
-      goog.isFunction(opt_onRejected) ? opt_onRejected : null, opt_context);
+      isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
+      isFunction(opt_onRejected) ? opt_onRejected : null, opt_context);
 };
 Thenable.addImplementation(CancellablePromise);
 
@@ -850,7 +850,7 @@ CancellablePromise.prototype.addChildPromise_ = function(
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!goog.isDef(result) &&
+        if (!isDef(result) &&
             reason instanceof CancellablePromise.CancellationError) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
@@ -962,10 +962,10 @@ CancellablePromise.maybeThen_ = function(value, onFulfilled, onRejected, context
     value = /** @type {!Thenable} */ (value);
     value.then(onFulfilled, onRejected, context);
     return true;
-  } else if (goog.isObject(value)) {
+  } else if (isObject(value)) {
     try {
       var then = value['then'];
-      if (goog.isFunction(then)) {
+      if (isFunction(then)) {
         CancellablePromise.tryThen_(value, then, onFulfilled, onRejected, context);
         return true;
       }
@@ -1194,7 +1194,7 @@ CancellablePromise.invokeCallback_ = function(callbackEntry, state, result) {
  * @private
  */
 CancellablePromise.prototype.addStackTrace_ = function(err) {
-  if (CancellablePromise.LONG_STACK_TRACES && goog.isString(err.stack)) {
+  if (CancellablePromise.LONG_STACK_TRACES && isString(err.stack)) {
     // Extract the third line of the stack trace, which is the entry for the
     // user function that called into Promise code.
     var trace = err.stack.split('\n', 4)[3];
@@ -1217,7 +1217,7 @@ CancellablePromise.prototype.addStackTrace_ = function(err) {
  * @private
  */
 CancellablePromise.prototype.appendLongStack_ = function(err) {
-  if (CancellablePromise.LONG_STACK_TRACES && err && goog.isString(err.stack) &&
+  if (CancellablePromise.LONG_STACK_TRACES && err && isString(err.stack) &&
       this.stack_.length) {
     var longTrace = ['Promise trace:'];
 
