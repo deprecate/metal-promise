@@ -10,6 +10,7 @@
 
 'use strict';
 
+import FreeList from './FreeList';
 import Thenable from './Thenable';
 import { isDef, isFunction, isObject, isString, nullFunction } from 'metal';
 import { async } from 'metal';
@@ -300,8 +301,8 @@ CancellablePromise.CallbackEntry_.prototype.reset = function() {
 CancellablePromise.DEFAULT_MAX_UNUSED = 100;
 
 
-/** @const @private {async.FreeList<!CancellablePromise.CallbackEntry_>} */
-CancellablePromise.freelist_ = new async.FreeList(
+/** @const @private {FreeList<!CancellablePromise.CallbackEntry_>} */
+CancellablePromise.freelist_ = new FreeList(
     function() { return new CancellablePromise.CallbackEntry_(); },
     function(item) { item.reset(); }, CancellablePromise.DEFAULT_MAX_UNUSED);
 
