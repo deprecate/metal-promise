@@ -92,7 +92,7 @@ var partial = function(fn) {
  * @constructor
  * @struct
  * @final
- * @implements {goog.Thenable<TYPE>}
+ * @implements {Thenable<TYPE>}
  * @template TYPE,RESOLVER_CONTEXT
  */
 var CancellablePromise = function(resolver, opt_context) {
@@ -383,7 +383,7 @@ CancellablePromise.reject = function(opt_reason) {
  * avoids creating an unnecessary wrapper Promise when {@code value} is already
  * thenable.
  *
- * @param {?(goog.Thenable<TYPE>|Thenable|TYPE)} value
+ * @param {?(Thenable<TYPE>|Thenable|TYPE)} value
  * @param {function(TYPE): ?} onFulfilled
  * @param {function(*): *} onRejected
  * @template TYPE
@@ -399,7 +399,7 @@ CancellablePromise.resolveThen_ = function(value, onFulfilled, onRejected) {
 
 
 /**
- * @param {!Array<?(CancellablePromise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+ * @param {!Array<?(CancellablePromise<TYPE>|Thenable<TYPE>|Thenable|*)>}
  *     promises
  * @return {!CancellablePromise<TYPE>} A Promise that receives the result of the
  *     first Promise (or Promise-like) input to settle immediately after it
@@ -420,7 +420,7 @@ CancellablePromise.race = function(promises) {
 
 
 /**
- * @param {!Array<?(CancellablePromise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+ * @param {!Array<?(CancellablePromise<TYPE>|Thenable<TYPE>|Thenable|*)>}
  *     promises
  * @return {!CancellablePromise<!Array<TYPE>>} A Promise that receives a list of
  *     every fulfilled value once every input Promise (or Promise-like) is
@@ -457,7 +457,7 @@ CancellablePromise.all = function(promises) {
 
 
 /**
- * @param {!Array<?(CancellablePromise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+ * @param {!Array<?(CancellablePromise<TYPE>|Thenable<TYPE>|Thenable|*)>}
  *     promises
  * @return {!CancellablePromise<!Array<{
  *     fulfilled: boolean,
@@ -501,7 +501,7 @@ CancellablePromise.allSettled = function(promises) {
 
 
 /**
- * @param {!Array<?(CancellablePromise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+ * @param {!Array<?(CancellablePromise<TYPE>|Thenable<TYPE>|Thenable|*)>}
  *     promises
  * @return {!CancellablePromise<TYPE>} A Promise that receives the value of the first
  *     input to be fulfilled, or is rejected with a list of every rejection
@@ -589,7 +589,7 @@ CancellablePromise.prototype.then = function(
       goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
       goog.isFunction(opt_onRejected) ? opt_onRejected : null, opt_context);
 };
-goog.Thenable.addImplementation(CancellablePromise);
+Thenable.addImplementation(CancellablePromise);
 
 
 /**
@@ -958,8 +958,8 @@ CancellablePromise.maybeThen_ = function(value, onFulfilled, onRejected, context
   if (value instanceof CancellablePromise) {
     value.thenVoid(onFulfilled, onRejected, context);
     return true;
-  } else if (goog.Thenable.isImplementedBy(value)) {
-    value = /** @type {!goog.Thenable} */ (value);
+  } else if (Thenable.isImplementedBy(value)) {
+    value = /** @type {!Thenable} */ (value);
     value.then(onFulfilled, onRejected, context);
     return true;
   } else if (goog.isObject(value)) {
