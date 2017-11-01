@@ -1,4 +1,4 @@
-import CancellablePromise from './promise/Promise';
+import CancellablePromise from './CancellablePromise';
 import ProgressPromise from './ProgressPromise';
 
 export { CancellablePromise, ProgressPromise };
