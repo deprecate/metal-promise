@@ -1,6 +1,6 @@
 'use strict';
 
-import CancellablePromise from './promise/Promise';
+import CancellablePromise from './CancellablePromise';
 import { async, isDef } from 'metal';
 
 class ProgressPromise extends CancellablePromise {
@@ -32,11 +32,7 @@ class ProgressPromise extends CancellablePromise {
 	 * @inheritdoc
 	 */
 	addChildPromise_(onFulfilled, onRejected, opt_context) {
-		var callbackEntry = {
-			child: null,
-			onFulfilled: null,
-			onRejected: null
-		};
+		var callbackEntry = CancellablePromise.getCallbackEntry_(null, null, null);
 
 		callbackEntry.child = new ProgressPromise(function(resolve, reject) {
 			callbackEntry.onFulfilled = onFulfilled ? function(value) {
@@ -72,10 +68,8 @@ class ProgressPromise extends CancellablePromise {
 	 * @param {!number} progress A percentage between 0 and 1
 	 */
 	callChildProgressListeners_(progress) {
-		if (this.callbackEntries_ && this.callbackEntries_.length) {
-			this.callbackEntries_.forEach(callback => {
-				this.callProgressListeners_(progress, callback.child.listeners_);
-			});
+		if (this.callbackEntries_ && this.callbackEntries_.child) {
+			this.callProgressListeners_(progress, this.callbackEntries_.child.listeners_);
 		}
 	}
 
