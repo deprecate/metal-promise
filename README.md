@@ -14,36 +14,23 @@
  */
  ```
 
-## Updating
+## Setup
 
-`metal-promise` is essentially a copy of google closure's Promise polyfill,
-because of this there are certain steps that need to be taken in order to make
-it compatible with the Metal ecosystem.
+1. Install a recent release of [NodeJS](https://nodejs.org/en/download/) if you
+don't have it yet.
 
-### Step 1 - Copy From Source
+2. Install local dependencies:
 
-The source files are located in the https://github.com/google/closure-library/ repository.
+  ```
+  npm install
+  ```
 
-Here is a list of the components that need to be copied.
+3. Run the tests:
 
-1. Promise (CancellablePromise): https://github.com/google/closure-library/blob/master/closure/goog/promise/promise.js
-2. Thenable: https://github.com/google/closure-library/blob/master/closure/goog/promise/thenable.js
-3. FreeList: https://github.com/google/closure-library/blob/master/closure/goog/async/freelist.js
+  ```
+  npm test
+  ```
 
-Current `closure-library` SHA of copied files: https://github.com/google/closure-library/commit/a02961362b67992f2fee13bf74672bd576d67af7
+## Contributing
 
-### Step 2 - Convert
-
-These files contain many references to various `goog` globals that need to be
-either removed or updated to a Metal alternative.
-
-Check this commit range to see a full list of necessary changes.
-
-https://github.com/metal/metal-promise/compare/2b195bc02d390da1203d50918613cc8f93a31070...2b4b990c61a9c4616779f75d169ac27d9dcc32bf
-
-### Step 3 - Tests
-
-When updating, check to see if any new features or methods have been added, if
-so add any additional tests to cover that use case.
-
-Google closure tests: https://github.com/google/closure-library/blob/master/closure/goog/promise/promise_test.js
+Check out the [contributing guidelines](https://github.com/metal/metal-promise/blob/master/CONTRIBUTING.md) for more information.
