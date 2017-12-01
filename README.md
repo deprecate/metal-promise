@@ -14,36 +14,94 @@
  */
  ```
 
-## Updating
+## Use
 
-`metal-promise` is essentially a copy of google closure's Promise polyfill,
-because of this there are certain steps that need to be taken in order to make
-it compatible with the Metal ecosystem.
+### Simple use case
 
-### Step 1 - Copy From Source
+```javascript
+import CancellablePromise from 'metal-promise';
 
-The source files are located in the https://github.com/google/closure-library/ repository.
+new CancellablePromise(function(resolve, reject) {
+  asyncFunction(function(err) {
+    if (err) {
+      reject(err);
+    }
+    else {
+      resolve();
+    }
+  });
+})
+.then(function() {
+  // Invoked once resolved
+})
+.catch(function(err) {
+  // Invoked once rejected
+});
+```
 
-Here is a list of the components that need to be copied.
+### Progress tracking
 
-1. Promise (CancellablePromise): https://github.com/google/closure-library/blob/master/closure/goog/promise/promise.js
-2. Thenable: https://github.com/google/closure-library/blob/master/closure/goog/promise/thenable.js
-3. FreeList: https://github.com/google/closure-library/blob/master/closure/goog/async/freelist.js
+In addition to Google Closure's implementation of Promise,
+the `ProgressPromise` class is also provided for tracking the progress of an
+async process.
 
-Current `closure-library` SHA of copied files: https://github.com/google/closure-library/commit/a02961362b67992f2fee13bf74672bd576d67af7
+```javascript
+import {ProgressPromise} from 'metal-promise';
 
-### Step 2 - Convert
+new ProgressPromise(function(resolve, reject, progress) {
+  progress(0.3);
+  progress(0.5);
+  progress(0.7);
+  progress(0.9);
 
-These files contain many references to various `goog` globals that need to be
-either removed or updated to a Metal alternative.
+  setTimeout(function() {
+    resolve();
+  }, 100);
+})
+.progress(progress => {
+  // Will invoke 4 times, 0.3, 0.5, 0.7, 0.9
+})
+.then(function() {
+  // Invoked after all progress calls
+});
+```
 
-Check this commit range to see a full list of necessary changes.
+Note that the `progress` function must be invoked with a number
+between `0` and `1`.
 
-https://github.com/metal/metal-promise/compare/2b195bc02d390da1203d50918613cc8f93a31070...2b4b990c61a9c4616779f75d169ac27d9dcc32bf
+```javascript
+progress(2); // TypeError: The progress percentage should be a number between 0 and 1
+```
 
-### Step 3 - Tests
+It also cannot be invoked with a smaller number than the previous call.
 
-When updating, check to see if any new features or methods have been added, if
-so add any additional tests to cover that use case.
+```javascript
+progress(0.3);
+progress(0.1); // Error: The progress percentage can't be lower than the previous percentage
+```
 
-Google closure tests: https://github.com/google/closure-library/blob/master/closure/goog/promise/promise_test.js
+### Advanced use cases
+
+To see more advanced documentation, please visit Google Closure
+Library's [documentation](https://google.github.io/closure-library/api/goog.Promise.html);
+
+## Setup
+
+1. Install a recent release of [NodeJS](https://nodejs.org/en/download/) if you
+don't have it yet.
+
+2. Install local dependencies:
+
+  ```
+  npm install
+  ```
+
+3. Run the tests:
+
+  ```
+  npm test
+  ```
+
+## Contributing
+
+Check out the [contributing guidelines](https://github.com/metal/metal-promise/blob/master/CONTRIBUTING.md) for more information.
